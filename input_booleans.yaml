@@ -1,0 +1,6 @@
+bath_heating:
+  name: "bath_heating"
+  initial: off
+vacation_mode:
+  name: "Vacation mode"
+  initial: off

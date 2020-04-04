@@ -1,0 +1,15 @@
+- platform: template
+  switches:
+    bath_heating:
+      friendly_name: "Heating the bath"
+      value_template: "{{ is_state('input_boolean.bath_heating', 'on') }}"
+      turn_on:
+        - service: script.turn_on
+          entity_id: script.heizung
+        - service: input_boolean.turn_on
+          entity_id: input_boolean.bath_heating
+      turn_off:
+        - service: climate.turn_off
+          entity_id: climate.bathroom
+        - service: input_boolean.turn_off
+          entity_id: input_boolean.bath_heating

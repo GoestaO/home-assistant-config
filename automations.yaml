@@ -1,0 +1,283 @@
+- id: '1572719745182'
+  alias: Mach Toaster nach 5 Minuten aus
+  description: ''
+  trigger:
+  - device_id: cf983160a5b6426d8053f5547d3857e2
+    domain: switch
+    entity_id: switch.toaster
+    platform: device
+    type: turned_on
+  condition: []
+  action:
+  - delay: 00:05:00
+  - device_id: cf983160a5b6426d8053f5547d3857e2
+    domain: switch
+    entity_id: switch.toaster
+    type: turn_off
+- id: '1572821002116'
+  alias: Licht aus
+  description: ''
+  trigger:
+  - at: '23:00'
+    platform: time
+  condition:
+  - condition: state
+    entity_id: input_boolean.vacation_mode
+    state: 'on'
+  action:
+  - device_id: 152990169e864794a79e0931a2ee677d
+    domain: switch
+    entity_id: switch.couch
+    type: turn_off
+  - delay: '{{ ((range(0, 1) | random) | int) ~ ":" ~ ((range(5, 30) | random) | int)  ~
+      ":" ~  ((range(5, 55) | random) | int) }}'
+  - device_id: 9f551ecb7e73483496c2c97311a8834c
+    domain: switch
+    entity_id: switch.kuechentisch
+    type: turn_off
+  - device_id: 95e6e30b0db848e4a3ca365a88d68afc
+    domain: switch
+    entity_id: switch.bed
+    type: turn_off
+- id: '1572821325365'
+  alias: Küchengeräte ausmachen beim Verlassen der Wohnung
+  description: ''
+  trigger:
+  - entity_id: device_tracker.pixel_2
+    event: leave
+    platform: zone
+    zone: zone.home
+  - entity_id: device_tracker.lav_yu
+    event: leave
+    platform: zone
+    zone: zone.home
+  condition:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: device_tracker.lav_yu
+      state: not_home
+    - condition: state
+      entity_id: device_tracker.pixel_2
+      state: not_home
+  action:
+  - device_id: b2fd6988e50d410cb4679a304ee8fccb
+    domain: light
+    entity_id: light.kitchen_2
+    type: turn_off
+- id: '1574201751222'
+  alias: Heizung am Morgen
+  description: ''
+  trigger:
+  - at: 08:15
+    platform: time
+  condition:
+  - condition: state
+    entity_id: device_tracker.192_168_178_22
+    state: home
+  - condition: state
+    entity_id: device_tracker.lav_yu
+    state: home
+  action:
+  - data:
+      entity_id: climate.bathroom
+    service: script.heizung
+- id: '1574287615042'
+  alias: Heizung Nachtabsenkung
+  description: ''
+  trigger:
+  - at: '23:00'
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: climate.bathroom
+    service: climate.turn_off
+- id: '1574546775193'
+  alias: Licht anmachen bei Ankunft
+  description: ''
+  trigger:
+  - entity_id: device_tracker.ubyiyegc_goesta
+    platform: state
+    to: home
+  - entity_id: device_tracker.lav_yu
+    platform: state
+    to: home
+  - entity_id: device_tracker.192_168_178_22
+    platform: state
+    to: home
+  condition:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  - before: '23:59'
+    condition: time
+  action:
+  - device_id: 152990169e864794a79e0931a2ee677d
+    domain: switch
+    entity_id: switch.couch
+    type: turn_on
+- id: '1574548544134'
+  alias: Test WLAN Login
+  description: ''
+  trigger:
+  - entity_id: device_tracker.192_168_178_22
+    platform: state
+    to: home
+  condition: []
+  action:
+  - device_id: 152990169e864794a79e0931a2ee677d
+    domain: switch
+    entity_id: switch.couch
+    type: turn_on
+- id: '1574638647047'
+  alias: Wasserkocher am Morgen
+  description: ''
+  trigger:
+  - at: 08:45
+    platform: time
+  condition:
+  - condition: state
+    entity_id: device_tracker.192_168_178_22
+    state: home
+  action:
+  - device_id: 434e558985a9451eb8587f227f156b2d
+    domain: switch
+    entity_id: switch.kettle
+    type: turn_on
+- id: '1575756920713'
+  alias: Licht am Abend
+  description: ''
+  trigger:
+  - event: sunset
+    platform: sun
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: input_boolean.vacation_mode
+      state: 'on'
+  action:
+  - device_id: 152990169e864794a79e0931a2ee677d
+    domain: switch
+    entity_id: switch.couch
+    type: turn_on
+  - device_id: 95e6e30b0db848e4a3ca365a88d68afc
+    domain: switch
+    entity_id: switch.bed
+    type: turn_on
+  - device_id: 9f551ecb7e73483496c2c97311a8834c
+    domain: switch
+    entity_id: switch.kuechentisch
+    type: turn_on
+- id: '1577043804696'
+  alias: Licht bei Bewegung anmachen
+  description: ''
+  trigger:
+  - device_id: 44e7b1bda76548308ec8ad65fb3cbd4c
+    domain: binary_sensor
+    entity_id: binary_sensor.presence
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+    platform: device
+    type: motion
+  condition:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  - after: '23:30'
+    before: 06:00
+    condition: time
+  action:
+  - device_id: 152990169e864794a79e0931a2ee677d
+    domain: switch
+    entity_id: switch.couch
+    type: turn_on
+- id: '1577136546904'
+  alias: Licht nach einiger Zeit wieder ausmachen
+  description: ''
+  trigger:
+  - device_id: 44e7b1bda76548308ec8ad65fb3cbd4c
+    domain: binary_sensor
+    entity_id: binary_sensor.presence
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+    platform: device
+    type: no_motion
+  condition:
+  - after: '23:30'
+    before: 05:00
+    condition: time
+  action:
+  - device_id: 152990169e864794a79e0931a2ee677d
+    domain: switch
+    entity_id: switch.couch
+    type: turn_off
+- id: '1577317589266'
+  alias: Mach Heizung im Bad nach 30 Minuten aus
+  description: ''
+  trigger:
+  - entity_id: climate.bathroom
+    from: 'off'
+    platform: state
+  condition: []
+  action:
+  - delay: 00:30:00
+  - alias: ''
+    data:
+      entity_id: climate.bathroom
+    entity_id: climate.bathroom
+    service: climate.turn_off
+  - entity_id: input_boolean.bath_heating
+    service: input_boolean.turn_off
+- id: '1577476640677'
+  alias: Alarm, when motion detected and nobody is at home
+  description: ''
+  trigger:
+  - device_id: 44e7b1bda76548308ec8ad65fb3cbd4c
+    domain: binary_sensor
+    entity_id: binary_sensor.presence
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+    platform: device
+    type: motion
+  condition:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: device_tracker.192_168_178_22
+      state: not_home
+    - condition: state
+      entity_id: device_tracker.lav_yu
+      state: not_home
+    - condition: state
+      entity_id: device_tracker.ubyiyegc_goesta
+      state: not_home
+    - condition: state
+      entity_id: input_boolean.vacation_mode
+      state: 'on'
+  action:
+  - entity_id: script.1577400292371
+    service: script.turn_on
+- id: '1579640771333'
+  alias: Mach Heizung aus Fallback
+  description: ''
+  trigger:
+  - entity_id: climate.bathroom
+    from: 'off'
+    platform: state
+  condition: []
+  action:
+  - delay: 00:31:00
+  - data:
+      entity_id: climate.bathroom
+    entity_id: climate.bathroom
+    service: climate.turn_off
+  - entity_id: input_boolean.bath_heating
+    service: input_boolean.turn_off

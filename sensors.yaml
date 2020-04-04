@@ -1,0 +1,10 @@
+- platform: miflora
+  mac: !secret miflora_mac
+  name: Flower 1
+  median: 3
+  monitored_conditions:
+    - moisture
+    - light
+    - temperature
+    - conductivity
+    - battery

@@ -1,0 +1,41 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+homeassistant:
+  customize: !include customize.yaml
+
+# Text to speech
+tts:
+  - platform: google_translate
+frontend:
+  themes: !include_dir_merge_named themes
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+sensor: !include sensors.yaml
+binary_sensor: !include binary_sensors.yaml
+device_tracker: !include device_trackers.yaml
+media_extractor:
+  default_query: worst
+  customize:
+    media_player.wohnzimmer:
+      music: bestaudio[ext=mp3]
+# climate:
+#   - platform: eq3btsmart
+#     devices:
+#       bathroom:
+#         mac: !secret bathroom_heater_mac
+vacuum:
+  - platform: xiaomi_miio
+    host: 192.168.178.37
+    token: !secret vacuum_token
+
+input_boolean: !include input_booleans.yaml
+
+switch: !include switches.yaml

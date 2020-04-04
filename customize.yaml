@@ -1,0 +1,4 @@
+device_tracker.192_168_178_22:
+  friendly_name: Pixel2-WLAN
+sensor.flower_1_temperature:
+  friendly_name: Temperature

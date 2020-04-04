@@ -1,0 +1,42 @@
+heizung:
+  alias: Morgenheizung
+  sequence:
+  - data:
+      entity_id: climate.bathroom
+      hvac_mode: auto
+      target_temp_high: 23
+      target_temp_low: 20
+      temperature: 23
+    entity_id: climate.bathroom
+    service: climate.set_temperature
+test:
+  alias: test
+  sequence:
+  - data:
+      entity_id: switch.couch
+    service: switch.toggle
+barking:
+  alias: Alarm
+  sequence:
+  - data:
+      volume_level: 1
+    entity_id: media_player.wohnzimmer
+    service: media_player.volume_set
+  - data:
+      media_content_id: http://soundbible.com/grab.php?id=2194&type=mp3
+      media_content_type: music
+    entity_id: media_player.wohnzimmer
+    service: media_player.play_media
+romance:
+  alias: Time for romance
+  sequence:
+  - scene: scene.romantic_light
+  - data:
+      media_content_id: https://www.youtube.com/watch?v=1eNSWZ4x2ZU
+      media_content_type: video
+    entity_id: media_player.wohnzimmer
+    service: media_extractor.play_media
+  - data:
+      volume_level: 0.6
+    entity_id: media_player.wohnzimmer
+    service: media_player.volume_set

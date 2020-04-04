@@ -1,0 +1,66 @@
+- id: '1578865059408'
+  name: Romantic
+  entities:
+    light.living_room:
+      brightness: 67
+      effect_list:
+      - colorloop
+      friendly_name: Living room
+      hs_color:
+      - 344.409
+      - 99.608
+      is_deconz_group: false
+      rgb_color:
+      - 255
+      - 0
+      - 67
+      state: 'on'
+      supported_features: 61
+      xy_color:
+      - 0.663
+      - 0.282
+- id: '1579817166122'
+  name: Heating the bath
+  entities:
+    climate.bathroom:
+      away_end:
+      current_temperature: 23
+      friendly_name: bathroom
+      hvac_modes:
+      - heat
+      - 'off'
+      - auto
+      is_locked: false
+      low_battery: false
+      max_temp: 29.5
+      min_temp: 5
+      preset_mode:
+      preset_modes:
+      - boost
+      - away
+      state: auto
+      supported_features: 17
+      temperature: 23
+      valve: 0
+      window_open: false
+- id: '1580415763582'
+  name: Muggeln
+  entities:
+    light.living_room:
+      brightness: 130
+      effect_list:
+      - colorloop
+      friendly_name: Living room
+      hs_color:
+      - 30.588
+      - 100
+      is_deconz_group: false
+      rgb_color:
+      - 255
+      - 129
+      - 0
+      state: 'on'
+      supported_features: 61
+      xy_color:
+      - 0.61
+      - 0.376
