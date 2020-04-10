@@ -16,3 +16,4 @@
       - type: memory_use
       - type: memory_use_percent
       - type: processor_use
+- platform: fritzbox_netmonitor
