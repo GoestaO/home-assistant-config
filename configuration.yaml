@@ -26,11 +26,12 @@ media_extractor:
   customize:
     media_player.wohnzimmer:
       music: bestaudio[ext=mp3]
-# climate:
-#   - platform: eq3btsmart
-#     devices:
-#       bathroom:
-#         mac: !secret bathroom_heater_mac
+influxdb:
+climate:
+  - platform: eq3btsmart
+    devices:
+      bathroom:
+        mac: !secret bathroom_heater_mac
 vacuum:
   - platform: xiaomi_miio
     host: 192.168.178.37
