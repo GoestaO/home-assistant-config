@@ -281,3 +281,85 @@
     service: climate.turn_off
   - entity_id: input_boolean.bath_heating
     service: input_boolean.turn_off
+- id: '1589387016661'
+  alias: Wake me up
+  description: ''
+  trigger:
+  - platform: template
+    value_template: '{{ states(''sensor.alarm_hours_int'') == states(''sensor.current_hours_int'')
+      and states(''sensor.alarm_minutes_int'')|int - states(''sensor.current_minutes_int'')|int
+      == 1}}'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.workday_sensor
+    state: 'on'
+  - condition: state
+    entity_id: input_boolean.vacation_mode
+    state: 'off'
+  action:
+  - data: {}
+    entity_id: switch.musicbox
+    service: switch.turn_on
+  - delay: 00:01:00
+  - data:
+      media_content_id: https://soundcloud.com/soundsofnaturewhitenoisesoundeffects/bird-sounds-morning-birds-for
+      media_content_type: music
+    entity_id: media_player.wohnzimmer
+    service: media_extractor.play_media
+  - delay: 00:00:05
+  - data:
+      entity_id: media_player.wohnzimmer
+      volume_level: 0.4
+    entity_id: media_player.wohnzimmer
+    service: media_player.volume_set
+- id: '1590432786127'
+  alias: Switch off music box completely when off
+  description: ''
+  trigger:
+  - entity_id: media_player.wohnzimmer
+    for: 00:05:00
+    platform: state
+    to: idle
+  - entity_id: media_player.wohnzimmer
+    for: 00:05:00
+    platform: state
+    to: 'off'
+  - entity_id: media_player.wohnzimmer
+    for: 00:05:00
+    platform: state
+    to: paused
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.musicbox
+    service: switch.turn_off
+- id: '1592681919109'
+  alias: Licht aus
+  description: ''
+  trigger:
+  - at: 00:00
+    platform: time
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.couch
+    service: switch.turn_off
+- id: '1594164761178'
+  alias: Turn off pump after 15 minutes
+  description: ''
+  trigger:
+  - device_id: 022315aeed55417d8b1ff58093b66e3b
+    domain: switch
+    entity_id: switch.pump
+    for:
+      hours: 0
+      minutes: 15
+      seconds: 0
+    platform: device
+    type: turned_on
+  condition: []
+  action:
+  - device_id: 022315aeed55417d8b1ff58093b66e3b
+    domain: switch
+    entity_id: switch.pump
+    type: turn_off

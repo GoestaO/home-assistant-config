@@ -1,0 +1,42 @@
+esphome:
+  name: magicbot
+  platform: ESP8266
+  board: nodemcuv2
+
+wifi:
+  ssid: !secrets wifi_ssid
+  password: !secrets wifi_password
+  fast_connect: true
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Balcony Fallback Hotspot"
+    password: "ZQOlQBB8yRyK"
+
+captive_portal:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+# Logger must be at least debug (default)
+logger:
+  level: INFO
+
+switch:
+  - platform: gpio
+    name: "pump"
+    pin: D1
+    inverted: yes
+    id: pump
+
+sensor:
+  - platform: adc
+    pin: A0
+    name: "Soil moisture"
+    accuracy_decimals: 0
+    filters:
+      - calibrate_linear:
+          - 0.78906 -> 0
+          - 0.36523 -> 100
+    unit_of_measurement: "%"

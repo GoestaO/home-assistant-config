@@ -17,3 +17,41 @@
       - type: memory_use_percent
       - type: processor_use
 - platform: fritzbox_netmonitor
+- platform: template
+  sensors:
+    transmission_rate_up:
+      value_template: "{{ state_attr('sensor.fritz_netmonitor', 'transmission_rate_up') }}"
+      friendly_name: 'Current upstream speed in bytes/s'
+      unit_of_measurement: "bytes/s"
+    transmission_rate_down:
+      value_template: "{{ state_attr('sensor.fritz_netmonitor', 'transmission_rate_down') }}"
+      friendly_name: 'Current downstream speed in bytes/s'
+      unit_of_measurement: "bytes/s"
+    connected:
+      value_template: "{{ state_attr('sensor.fritz_netmonitor', 'is_linked') }}"
+      friendly_name: 'DSL connected'
+      unit_of_measurement: "Boolean"
+    max_byte_rate_up:
+      value_template: "{{ state_attr('sensor.fritz_netmonitor', 'max_byte_rate_up') }}"
+      friendly_name: 'Max upload rate'
+      unit_of_measurement: "bytes/s"
+    max_byte_rate_down:
+      value_template: "{{ state_attr('sensor.fritz_netmonitor', 'max_byte_rate_down') }}"
+      friendly_name: 'Max download rate'
+      unit_of_measurement: "bytes/s"
+    bytes_sent:
+      value_template: "{{ state_attr('sensor.fritz_netmonitor', 'bytes_sent') }}"
+      friendly_name: 'Bytes sent'
+      unit_of_measurement: "bytes"
+    bytes_received:
+      value_template: "{{ state_attr('sensor.fritz_netmonitor', 'bytes_received') }}"
+      friendly_name: 'Bytes received'
+      unit_of_measurement: "bytes"
+    alarm_hours_int:
+      value_template: "{{ states('input_datetime.alarm_time').split(':')[0]|int }}"
+    alarm_minutes_int:
+      value_template: "{{ states('input_datetime.alarm_time').split(':')[1]|int }}"
+    current_hours_int:
+      value_template: "{{ states('sensor.time').split(':')[0]|int }}"
+    current_minutes_int:
+      value_template: "{{ states('sensor.time').split(':')[1]|int }}"

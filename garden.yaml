@@ -1,0 +1,47 @@
+esphome:
+  name: gardenbot
+  platform: ESP32
+  board: nodemcu-32s
+
+# Enable logging
+logger:
+
+switch:
+  - platform: gpio
+    name: "pump"
+    pin: 25
+    inverted: yes
+    id: pump
+
+esp32_ble_tracker:
+
+deep_sleep:
+  id: deep_sleep_1
+  sleep_duration: 210min
+
+sensor:
+  - platform: xiaomi_hhccjcy01
+    mac_address: !secret miflora_mac
+    moisture:
+      name: "moisture"
+      id: "moisture"
+      on_value:
+        then:
+          if:
+            condition:
+              sensor.in_range:
+                id: moisture
+                below: 15.0
+            then:
+              - script.execute: water
+            else:
+              - deep_sleep.enter: deep_sleep_1
+
+script:
+  - id: water
+    then:
+      - deep_sleep.prevent: deep_sleep_1
+      - switch.turn_on: pump
+      - delay: 60s
+      - switch.turn_off: pump
+      - deep_sleep.enter: deep_sleep_1

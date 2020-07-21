@@ -63,4 +63,25 @@
       supported_features: 61
       xy_color:
       - 0.61
+- id: '1587499299853'
+  name: Lesen
+  entities:
+    light.living_room:
+      brightness: 191
+      effect_list:
+      - colorloop
+      friendly_name: Living room
+      hs_color:
+      - 30.588
+      - 100
+      is_deconz_group: false
+      rgb_color:
+      - 255
+      - 129
+      - 0
+      state: 'on'
+      supported_features: 61
+      xy_color:
+      - 0.61
+      - 0.376
       - 0.376
