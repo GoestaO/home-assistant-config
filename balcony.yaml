@@ -7,10 +7,6 @@ wifi:
   ssid: !secrets wifi_ssid
   password: !secrets wifi_password
   fast_connect: true
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "Balcony Fallback Hotspot"
-    password: "ZQOlQBB8yRyK"
 
 captive_portal:
 
