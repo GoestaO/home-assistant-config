@@ -15,7 +15,7 @@
     entity_id: switch.toaster
     type: turn_off
 - id: '1572821002116'
-  alias: Licht aus
+  alias: Licht aus im Urlaub
   description: ''
   trigger:
   - at: '23:00'
@@ -25,20 +25,21 @@
     entity_id: input_boolean.vacation_mode
     state: 'on'
   action:
-  - device_id: 152990169e864794a79e0931a2ee677d
-    domain: switch
+  - delay: '{{ 0 ~ ":" ~ ((range(5, 30) | random) | int)  ~ ":" ~  ((range(5, 55)
+      | random) | int) }}'
+  - data: {}
     entity_id: switch.couch
-    type: turn_off
-  - delay: '{{ ((range(0, 1) | random) | int) ~ ":" ~ ((range(5, 30) | random) | int)  ~
-      ":" ~  ((range(5, 55) | random) | int) }}'
-  - device_id: 9f551ecb7e73483496c2c97311a8834c
-    domain: switch
-    entity_id: switch.kuechentisch
-    type: turn_off
-  - device_id: 95e6e30b0db848e4a3ca365a88d68afc
-    domain: switch
-    entity_id: switch.bed
-    type: turn_off
+    service: switch.turn_off
+  - delay: '{{ 0 ~ ":" ~ ((range(5, 30) | random) | int)  ~ ":" ~  ((range(5, 55)
+      | random) | int) }}'
+  - data: {}
+    entity_id: switch.tischlampe1
+    service: switch.turn_off
+  - delay: '{{ 0 ~ ":" ~ ((range(5, 30) | random) | int)  ~ ":" ~  ((range(5, 55)
+      | random) | int) }}'
+  - data: {}
+    entity_id: light.living_room
+    service: light.turn_off
 - id: '1572821325365'
   alias: Küchengeräte ausmachen beim Verlassen der Wohnung
   description: ''
@@ -157,19 +158,22 @@
     - condition: state
       entity_id: input_boolean.vacation_mode
       state: 'on'
+    - condition: state
+      entity_id: device_tracker.lav_yu
+      state: home
+    - condition: state
+      entity_id: device_tracker.192_168_178_22
+      state: home
   action:
-  - device_id: 152990169e864794a79e0931a2ee677d
-    domain: switch
+  - data: {}
     entity_id: switch.couch
-    type: turn_on
-  - device_id: 95e6e30b0db848e4a3ca365a88d68afc
-    domain: switch
-    entity_id: switch.bed
-    type: turn_on
-  - device_id: 9f551ecb7e73483496c2c97311a8834c
-    domain: switch
-    entity_id: switch.kuechentisch
-    type: turn_on
+    service: switch.turn_on
+  - data: {}
+    entity_id: switch.tischlampe1
+    service: switch.turn_on
+  - entity_id: scene.muggeln
+    service: scene.turn_on
+  mode: single
 - id: '1577043804696'
   alias: Licht bei Bewegung anmachen
   description: ''
@@ -195,28 +199,6 @@
     domain: switch
     entity_id: switch.couch
     type: turn_on
-- id: '1577136546904'
-  alias: Licht nach einiger Zeit wieder ausmachen
-  description: ''
-  trigger:
-  - device_id: 44e7b1bda76548308ec8ad65fb3cbd4c
-    domain: binary_sensor
-    entity_id: binary_sensor.presence
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 30
-    platform: device
-    type: no_motion
-  condition:
-  - after: '23:30'
-    before: 05:00
-    condition: time
-  action:
-  - device_id: 152990169e864794a79e0931a2ee677d
-    domain: switch
-    entity_id: switch.couch
-    type: turn_off
 - id: '1577317589266'
   alias: Mach Heizung im Bad nach 30 Minuten aus
   description: ''
@@ -251,19 +233,20 @@
   - condition: and
     conditions:
     - condition: state
-      entity_id: device_tracker.192_168_178_22
-      state: not_home
-    - condition: state
       entity_id: device_tracker.lav_yu
-      state: not_home
-    - condition: state
-      entity_id: device_tracker.ubyiyegc_goesta
       state: not_home
     - condition: state
       entity_id: input_boolean.vacation_mode
       state: 'on'
+    - condition: state
+      entity_id: device_tracker.192_168_178_22
+      state: not_home
   action:
-  - entity_id: script.1577400292371
+  - data:
+      message: Alarm!
+    service: notify.mobile_app_pixel_2
+  - data: {}
+    entity_id: script.1577400292371
     service: script.turn_on
 - id: '1579640771333'
   alias: Mach Heizung aus Fallback
@@ -302,8 +285,8 @@
     service: switch.turn_on
   - delay: 00:01:00
   - data:
-      media_content_id: https://soundcloud.com/soundsofnaturewhitenoisesoundeffects/bird-sounds-morning-birds-for
-      media_content_type: music
+      media_content_id: https://www.youtube.com/watch?v=xXDC5xGy8wo
+      media_content_type: video/youtube
     entity_id: media_player.wohnzimmer
     service: media_extractor.play_media
   - delay: 00:00:05
@@ -312,6 +295,7 @@
       volume_level: 0.4
     entity_id: media_player.wohnzimmer
     service: media_player.volume_set
+  mode: single
 - id: '1590432786127'
   alias: Switch off music box completely when off
   description: ''
@@ -345,21 +329,248 @@
     entity_id: switch.couch
     service: switch.turn_off
 - id: '1594164761178'
-  alias: Turn off pump after 15 minutes
+  alias: Turn pump off after 30 minutes
   description: ''
   trigger:
-  - device_id: 022315aeed55417d8b1ff58093b66e3b
+  - device_id: 6fdb9b50b98441858270f07a66fcd833
     domain: switch
     entity_id: switch.pump
     for:
       hours: 0
-      minutes: 15
+      minutes: 30
       seconds: 0
     platform: device
     type: turned_on
   condition: []
   action:
-  - device_id: 022315aeed55417d8b1ff58093b66e3b
+  - device_id: 6fdb9b50b98441858270f07a66fcd833
     domain: switch
     entity_id: switch.pump
     type: turn_off
+  mode: single
+- id: '1600034248584'
+  alias: Pumpe am Morgen
+  description: ''
+  trigger:
+  - at: 09:00
+    platform: time
+  condition: []
+  action:
+  - device_id: 6fdb9b50b98441858270f07a66fcd833
+    domain: switch
+    entity_id: switch.pump
+    type: turn_on
+  - delay: 00:30:00
+  - device_id: 6fdb9b50b98441858270f07a66fcd833
+    domain: switch
+    entity_id: switch.pump
+    type: turn_off
+  mode: single
+- id: '1600804660957'
+  alias: Airpump
+  description: ''
+  trigger:
+  - minutes: /30
+    platform: time_pattern
+  condition:
+  - after: 07:00
+    before: '23:00'
+    condition: time
+  action:
+  - data: {}
+    entity_id: switch.four
+    service: switch.turn_on
+  - delay: 00:05:00
+  - data: {}
+    entity_id: switch.four
+    service: switch.turn_off
+  mode: single
+- id: '1601582985461'
+  alias: Increase brightness
+  description: ''
+  trigger:
+  - event_data:
+      event: 2002
+      id: tradfri_fernbedienung
+    event_type: deconz_event
+    platform: event
+  condition: []
+  action:
+  - data_template:
+      brightness: "{% set n = state_attr('light.kitchen_table', 'brightness') + 25\
+        \ %} {% if n > 255 %}\n  255\n{% else %}\n  {{ n }}\n{% endif %}\n"
+      transition: '1'
+    entity_id: light.kitchen_table
+    service: light.turn_on
+  mode: single
+- id: '1601668570889'
+  alias: Switch all lights off
+  description: ''
+  trigger:
+  - event_data:
+      event: 1002
+      id: tradfri_fernbedienung
+    event_type: deconz_event
+    platform: event
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 07b3f203f3e142a6a6045a23ba2b96b4
+    entity_id: light.kitchen_table
+    domain: light
+  - type: turn_off
+    device_id: 5d56b331a0ab43b6a225de9a6d823e72
+    entity_id: light.living_room
+    domain: light
+  - service: switch.turn_off
+    data: {}
+    entity_id: switch.couch
+  - service: switch.turn_off
+    data: {}
+  - service: switch.turn_off
+    data: {}
+    entity_id: switch.three
+  mode: single
+- id: '1601923769395'
+  alias: Select next bedroom scene
+  description: ''
+  trigger:
+  - platform: event
+    event_type: deconz_event
+    event_data:
+      event: 5002
+      id: tradfri_fernbedienung
+  condition: []
+  action:
+  - service: input_select.select_next
+    data: {}
+    entity_id: input_select.bedroom_scene_rotation
+  mode: single
+- id: '1601923782971'
+  alias: MuggelnSelected
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_select.bedroom_scene_rotation
+    to: Muggeln
+  condition: []
+  action:
+  - scene: scene.muggeln
+  mode: single
+- id: '1601923872510'
+  alias: LesenSelected
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_select.bedroom_scene_rotation
+    to: Lesen
+  condition: []
+  action:
+  - scene: scene.muggeln2
+  mode: single
+- id: '1601923924599'
+  alias: RomantikSelected
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_select.bedroom_scene_rotation
+    to: Romantik
+  condition: []
+  action:
+  - scene: scene.romantic
+  mode: single
+- id: '1601928690485'
+  alias: BedroomOffSelected
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_select.bedroom_scene_rotation
+    to: Aus
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 5d56b331a0ab43b6a225de9a6d823e72
+    entity_id: light.living_room
+    domain: light
+  mode: single
+- id: '1601929796392'
+  alias: Select next kitchen scene
+  description: ''
+  trigger:
+  - platform: event
+    event_type: deconz_event
+    event_data:
+      event: 4002
+      id: tradfri_fernbedienung
+  condition: []
+  action:
+  - service: input_select.select_next
+    data: {}
+    entity_id: input_select.kitchen_scene_rotation
+  mode: single
+- id: '1601929840706'
+  alias: DinnerSelected
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_select.kitchen_scene_rotation
+    to: Dinner
+  condition: []
+  action:
+  - scene: scene.dinner
+  mode: single
+- id: '1601929912770'
+  alias: KitchenNormalSelected
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_select.kitchen_scene_rotation
+    to: Normal
+  condition: []
+  action:
+  - scene: scene.kitchennormal
+  mode: single
+- id: '1601929968399'
+  alias: KitchenTableOffSelected
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_select.kitchen_scene_rotation
+    to: Aus
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 07b3f203f3e142a6a6045a23ba2b96b4
+    entity_id: light.kitchen_table
+    domain: light
+  mode: single
+- id: '1601931194581'
+  alias: Toggle bedlight
+  description: ''
+  trigger:
+  - platform: event
+    event_type: deconz_event
+    event_data:
+      event: 3002
+      id: tradfri_fernbedienung
+  condition: []
+  action:
+  - service: switch.toggle
+    data: {}
+    entity_id: switch.three
+  mode: single
+- id: '1601931366382'
+  alias: Toggle couch light
+  description: ''
+  trigger:
+  - platform: event
+    event_type: deconz_event
+    event_data:
+      id: tradfri_fernbedienung
+      event: 2002
+  condition: []
+  action:
+  - service: switch.toggle
+    data: {}
+    entity_id: switch.couch
+  mode: single
