@@ -8,6 +8,11 @@
     - temperature
     - conductivity
     - battery
+- platform: rest
+    name: Corona 100k Landkreis
+    resource: "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=GEN%20%3D%20%27Berlin%20Lichtenberg%27&outFields=cases7_per_100k&returnGeometry=false&outSR=4326&f=json"
+    value_template: '{{ value_json.features[0].attributes.cases7_per_100k | round(1) }}'
+    scan_interval: 3600
 - platform: systemmonitor
     resources:
       - type: disk_use_percent
