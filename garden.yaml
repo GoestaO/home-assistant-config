@@ -21,7 +21,7 @@ deep_sleep:
 
 sensor:
   - platform: xiaomi_hhccjcy01
-    mac_address: !secret miflora_mac
+    mac_address: !secret miflora_1_mac
     illuminance:
       name: "illuminance"
       id: "illuminance"
