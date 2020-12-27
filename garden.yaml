@@ -22,20 +22,32 @@ deep_sleep:
 sensor:
   - platform: xiaomi_hhccjcy01
     mac_address: !secret miflora_mac
-    moisture:
-      name: "moisture"
-      id: "moisture"
+    illuminance:
+      name: "illuminance"
+      id: "illuminance"
       on_value:
         then:
           if:
             condition:
               sensor.in_range:
-                id: moisture
-                below: 15.0
+                id: illuminance
+                above: 100.0
             then:
-              - script.execute: water
-            else:
-              - deep_sleep.enter: deep_sleep_1
+              deep_sleep.enter: deep_sleep_1
+    moisture:
+      name: "moisture"
+      id: "moisture"
+      on_value:
+        then:
+          - if:
+              condition:
+                sensor.in_range:
+                  id: moisture
+                  below: 20.0
+              then:
+                - script.execute: water
+              else:
+                - deep_sleep.enter: deep_sleep_1
 
 script:
   - id: water
